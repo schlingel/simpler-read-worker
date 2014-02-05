@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import at.fundev.simpler.reader.worker.ContentExtractor;
-import at.fundev.simpler.reader.worker.config.JsoupModule;
+import at.fundev.simpler.reader.worker.config.WorkerModule;
 import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
 import at.fundev.simpler.reader.worker.model.FeedItem;
 
@@ -26,7 +26,7 @@ public class ContentExtractorApp {
 		if(args.length < 1) {
 			System.out.println("ContentExtractorApp <url>");
 		} else {
-			Injector injector = Guice.createInjector(new JsoupModule());
+			Injector injector = Guice.createInjector(new WorkerModule());
 			ContentExtractorApp app = injector.getInstance(ContentExtractorApp.class);
 			String url = args[0];
 			System.out.println(app.extract(url));

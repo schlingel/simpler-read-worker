@@ -1,5 +1,8 @@
 package at.fundev.simpler.reader.worker;
 
+import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
+import at.fundev.simpler.reader.worker.model.FeedItem;
+
 public interface ExtractionProcessor {
-	public void process(String extractedContent);
+	void process(FeedItem feed, String extractedContent) throws SimplerReaderException;
 }
