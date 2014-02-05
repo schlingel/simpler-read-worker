@@ -12,7 +12,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 
-import com.google.inject.Inject;
 import com.squareup.okhttp.OkHttpClient;
 
 import at.fundev.simpler.reader.worker.FeedReader;
@@ -20,8 +19,11 @@ import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
 import at.fundev.simpler.reader.worker.model.FeedItem;
 
 public class JsoupFeedReader implements FeedReader {
-	@Inject
 	private OkHttpClient client;
+	
+	public JsoupFeedReader() {
+		client = new OkHttpClient();
+	}
 	
 	@Override
 	public Collection<FeedItem> extractItems(String feedUrl) throws SimplerReaderException {
