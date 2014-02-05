@@ -1,0 +1,8 @@
+<ivy-module version="2.0">
+    <info organisation="at.fundev" module="simpler-reader-worker"/>
+    <dependencies>
+		<dependency org="org.jsoup" name="jsoup" rev="1.7.3"/>
+		<dependency org="com.google.inject" name="guice" rev="4.0-beta"/>
+		<dependency org="com.squareup.okhttp" name="okhttp" rev="1.3.0" />		    
+    </dependencies>
+</ivy-module>
