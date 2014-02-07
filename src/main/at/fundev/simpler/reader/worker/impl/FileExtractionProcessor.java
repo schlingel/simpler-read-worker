@@ -37,7 +37,7 @@ public class FileExtractionProcessor implements ExtractionProcessor {
 	}
 
 	@Override
-	public void process(FeedItem feed, String extractedContent) throws SimplerReaderException {
+	public String process(FeedItem feed, String extractedContent) throws SimplerReaderException {
 		try {
 			String name = UUID.randomUUID().toString();
 			String content = String.format(TEMPLATE, feed.getName(), feed.getUrl(), extractedContent);
@@ -46,7 +46,7 @@ public class FileExtractionProcessor implements ExtractionProcessor {
 			writer.print(content);
 			writer.close();
 			
-			handler.handle(htmlFile);
+			return handler.handle(htmlFile);
 		} catch (IOException e) {
 			throw new SimplerReaderException(e);
 		}

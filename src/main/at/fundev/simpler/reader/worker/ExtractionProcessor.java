@@ -4,5 +4,5 @@ import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
 import at.fundev.simpler.reader.worker.model.FeedItem;
 
 public interface ExtractionProcessor {
-	void process(FeedItem feed, String extractedContent) throws SimplerReaderException;
+	String process(FeedItem feed, String extractedContent) throws SimplerReaderException;
 }

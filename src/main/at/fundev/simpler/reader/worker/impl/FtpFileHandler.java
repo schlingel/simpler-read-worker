@@ -32,9 +32,10 @@ public class FtpFileHandler implements FileHandler {
 	}
 	
 	@Override
-	public void handle(File file) throws SimplerReaderException {
+	public String handle(File file) throws SimplerReaderException {
 		if(isConfigValid()) {
 			uploadFile(file);
+			return getRelativePathOfUploadedFile(file);
 		} else {
 			throw new SimplerReaderException(new IllegalStateException(String.format("%s must not be used without valid configuration! Needs %s, %s, %s in configuration!", this.getClass().getSimpleName(), FTP_HOST, FTP_PASSWORD, FTP_USER)));
 		}
@@ -92,5 +93,12 @@ public class FtpFileHandler implements FileHandler {
 	
 	private String getRemoteDir() {
 		return config.hasKey(FTP_UPLOAD_DIR) ? config.getString(FTP_UPLOAD_DIR) : DEFAULT_REMOTE_DIR;
+	}
+	
+	private String getRelativePathOfUploadedFile(File file) {
+		String path = getRemoteDir();
+		boolean hasSeparator = path.endsWith(File.separator) || path.endsWith("/") || path.endsWith("\\");
+		
+		return path + (hasSeparator ? "/" : "") + file.getName();
 	}
 }
