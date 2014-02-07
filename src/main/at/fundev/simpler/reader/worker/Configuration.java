@@ -1,5 +1,7 @@
 package at.fundev.simpler.reader.worker;
 
+import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
+
 public interface Configuration {
 	public void setInt(String key, int value);
 	
@@ -15,7 +17,7 @@ public interface Configuration {
 	
 	public boolean hasKey(String key);
 	
-	public void load();
+	public void load() throws SimplerReaderException;
 	
-	public void save();
+	public void save() throws SimplerReaderException;
 }

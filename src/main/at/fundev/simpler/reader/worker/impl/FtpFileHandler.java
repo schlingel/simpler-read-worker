@@ -36,15 +36,21 @@ public class FtpFileHandler implements FileHandler {
 	public String handle(File file) throws SimplerReaderException {
 		if(isConfigValid()) {
 			uploadFile(file);
-			return getRelativePathOfUploadedFile(file);
+			return getURLOfUploadedFile(file);
 		} else {
 			throw new SimplerReaderException(new IllegalStateException(String.format("%s must not be used without valid configuration! Needs %s, %s, %s in configuration!", this.getClass().getSimpleName(), FTP_HOST, FTP_PASSWORD, FTP_USER)));
 		}
 	}
 	
-	private boolean isConfigValid() {
-		boolean isInvalid = (config == null) || config.getString(FTP_HOST) == null || config.getString(FTP_USER) == null || config.getString(FTP_PASSWORD) == null || config.getString(FTP_WEB_SERVER) == null;
-		return !isInvalid;
+	private boolean isConfigValid() throws SimplerReaderException {
+		if(config != null) {
+			config.load();
+			boolean isInvalid = config.getString(FTP_HOST) == null || config.getString(FTP_USER) == null || config.getString(FTP_PASSWORD) == null || config.getString(FTP_WEB_SERVER) == null;
+			
+			return !isInvalid;			
+		}
+		
+		return false;
 	}
 	
 	private void uploadFile(File file) throws SimplerReaderException {
@@ -96,7 +102,7 @@ public class FtpFileHandler implements FileHandler {
 		return config.hasKey(FTP_UPLOAD_DIR) ? config.getString(FTP_UPLOAD_DIR) : DEFAULT_REMOTE_DIR;
 	}
 	
-	private String getRelativePathOfUploadedFile(File file) {
+	private String getURLOfUploadedFile(File file) {
 		String path = getRemoteDir();
 		boolean hasSeparatorAtEnd = path.endsWith(File.separator) || path.endsWith("/") || path.endsWith("\\");
 		boolean hasSeparatorAtStart = path.startsWith(File.separator) || path.startsWith("/") || path.startsWith("\\");
