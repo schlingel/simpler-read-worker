@@ -43,10 +43,11 @@ public class FileExtractionProcessor implements ExtractionProcessor {
 		try {
 			String name = UUID.randomUUID().toString();
 			String encoding = feed.getEncoding();
-
-			System.out.println("Encoding: " + encoding);
-			String content = String.format(TEMPLATE, feed.getEncoding(),
-					feed.getName(), feed.getUrl(), extractedContent);
+			String content = String.format(TEMPLATE, 
+					feed.getEncoding(),
+					feed.getName(), 
+					feed.getUrl(), 
+					extractedContent);
 			File htmlFile = new File(directory, name + ".html");
 
 			OutputStreamWriter writer = new OutputStreamWriter(
