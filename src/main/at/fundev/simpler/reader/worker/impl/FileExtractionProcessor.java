@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.UUID;
 
+import com.google.inject.Inject;
+
 import at.fundev.simpler.reader.worker.ExtractionProcessor;
+import at.fundev.simpler.reader.worker.FileHandler;
 import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
 import at.fundev.simpler.reader.worker.model.FeedItem;
 
@@ -13,6 +16,12 @@ public class FileExtractionProcessor implements ExtractionProcessor {
 	private static final String TEMPLATE = "<html><head><title>%s</title></head><body data-origin=\"%s\">%s</body></html>";
 	
 	private File directory;
+	private FileHandler handler;
+	
+	@Inject
+	public FileExtractionProcessor(FileHandler handler) {
+		this.handler = handler;
+	}
 	
 	public FileExtractionProcessor() {
 		String homeDir = System.getProperty("user.home");
@@ -36,6 +45,8 @@ public class FileExtractionProcessor implements ExtractionProcessor {
 			PrintWriter writer = new PrintWriter(htmlFile);
 			writer.print(content);
 			writer.close();
+			
+			handler.handle(htmlFile);
 		} catch (IOException e) {
 			throw new SimplerReaderException(e);
 		}
