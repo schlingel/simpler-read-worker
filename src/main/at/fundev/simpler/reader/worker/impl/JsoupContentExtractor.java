@@ -3,6 +3,7 @@ package at.fundev.simpler.reader.worker.impl;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 
 import org.jsoup.Jsoup;
@@ -15,6 +16,7 @@ import com.squareup.okhttp.OkHttpClient;
 import at.fundev.simpler.reader.worker.ContentExtractor;
 import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
 import at.fundev.simpler.reader.worker.model.FeedItem;
+import at.fundev.simpler.reader.worker.utils.EncodingDetector;
 
 public class JsoupContentExtractor implements ContentExtractor {
 	private static final String[] VALID_TAG_NAMES = new String[] {
@@ -32,16 +34,19 @@ public class JsoupContentExtractor implements ContentExtractor {
 		StringBuffer buf = new StringBuffer();
 		HttpURLConnection conn = null;
 		try {
+			String encoding = getEncoding(feed.getUrl());
 			conn = client.open(new URL(feed.getUrl()));
 			
-			Document doc = Jsoup.parse(conn.getInputStream(), "UTF-8", feed.getUrl());
+			Document doc = Jsoup.parse(conn.getInputStream(), encoding, feed.getUrl());
 			Element contentContainer = findContentContainer(doc);
+			
+			feed.setEncoding(encoding);
 			
 			for(Element child : contentContainer.children()) {
 				String tagName = child.tagName();
 				tagName = (tagName != null) ? tagName.toLowerCase() : null;
 				
-				if(Arrays.asList(VALID_TAG_NAMES).contains(tagName)) {
+				if(Arrays.asList(VALID_TAG_NAMES).contains(tagName)) {		
 					buf.append(String.format("<%s>%s</%s>", tagName, child.html(), tagName));
 				}
 			}
@@ -54,6 +59,19 @@ public class JsoupContentExtractor implements ContentExtractor {
 		}
 		
 		return buf.toString();
+	}
+	
+	private String getEncoding(String url) throws SimplerReaderException {
+		try {
+			OkHttpClient client = new OkHttpClient();
+			URLConnection conn = client.open(new URL(url));
+			EncodingDetector detector = new EncodingDetector(conn.getInputStream());
+			detector.detectEncoding();
+			
+			return detector.getEncoding();			
+		} catch(IOException e) {
+			throw new SimplerReaderException(e);
+		}
 	}
 	
 	private Element findContentContainer(Document doc) {

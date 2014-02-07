@@ -3,6 +3,7 @@ package at.fundev.simpler.reader.worker.model;
 public class FeedItem {
 	private String name;
 	private String url;
+	private String encoding;
 	
 	public FeedItem(String name, String url) {
 		super();
@@ -25,5 +26,13 @@ public class FeedItem {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getEncoding() {
+		return encoding;
+	}
+
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
 	}
 }
