@@ -17,6 +17,7 @@ import at.fundev.simpler.reader.worker.FileHandler;
 import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
 
 public class FtpFileHandler implements FileHandler {
+	private static final String FTP_WEB_SERVER = "ftp.web.server";
 	private static final String DEFAULT_REMOTE_DIR = "sr";
 	private static final String FTP_UPLOAD_DIR = "ftp.upload.dir";
 	private static final int DEFAULT_FTP_PORT = 21;
@@ -42,7 +43,7 @@ public class FtpFileHandler implements FileHandler {
 	}
 	
 	private boolean isConfigValid() {
-		boolean isInvalid = (config == null) || config.getString(FTP_HOST) == null || config.getString(FTP_USER) == null || config.getString(FTP_PASSWORD) == null;
+		boolean isInvalid = (config == null) || config.getString(FTP_HOST) == null || config.getString(FTP_USER) == null || config.getString(FTP_PASSWORD) == null || config.getString(FTP_WEB_SERVER) == null;
 		return !isInvalid;
 	}
 	
@@ -97,8 +98,9 @@ public class FtpFileHandler implements FileHandler {
 	
 	private String getRelativePathOfUploadedFile(File file) {
 		String path = getRemoteDir();
-		boolean hasSeparator = path.endsWith(File.separator) || path.endsWith("/") || path.endsWith("\\");
+		boolean hasSeparatorAtEnd = path.endsWith(File.separator) || path.endsWith("/") || path.endsWith("\\");
+		boolean hasSeparatorAtStart = path.startsWith(File.separator) || path.startsWith("/") || path.startsWith("\\");
 		
-		return path + (hasSeparator ? "/" : "") + file.getName();
+		return config.getString(FTP_WEB_SERVER) + (hasSeparatorAtStart ? "" : "/") + path + (hasSeparatorAtEnd ? "" : "/") + file.getName();
 	}
 }
