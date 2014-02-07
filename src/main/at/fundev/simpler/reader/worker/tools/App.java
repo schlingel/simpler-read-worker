@@ -16,7 +16,7 @@ import at.fundev.simpler.reader.worker.model.FeedItem;
 
 public class App {
 	private static Injector injector = Guice.createInjector(new WorkerModule());
-	private static final int MAX_THREADS_COUNT = 10;
+	private static final int MAX_THREADS_COUNT = 4; // more than 4 thread lead to problems while uploading to FTP server
 	private static final long TIMEOUT_IN_MINUTES = 10;
 	
 	private FeedReader reader;

@@ -46,7 +46,6 @@ public class FtpFileHandler implements FileHandler {
 		if(config != null) {
 			config.load();
 			boolean isInvalid = config.getString(FTP_HOST) == null || config.getString(FTP_USER) == null || config.getString(FTP_PASSWORD) == null || config.getString(FTP_WEB_SERVER) == null;
-			
 			return !isInvalid;			
 		}
 		
@@ -93,6 +92,7 @@ public class FtpFileHandler implements FileHandler {
 	private void prepareDirectory(FTPClient client) throws SimplerReaderException {
 		try {
 			client.makeDirectory(getRemoteDir());
+			client.changeWorkingDirectory(getRemoteDir());
 		} catch (IOException e) {
 			throw new SimplerReaderException(e);
 		}

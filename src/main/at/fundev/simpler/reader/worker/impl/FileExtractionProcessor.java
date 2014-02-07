@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 
 import at.fundev.simpler.reader.worker.ExtractionProcessor;
 import at.fundev.simpler.reader.worker.FileHandler;
+import at.fundev.simpler.reader.worker.Notifier;
 import at.fundev.simpler.reader.worker.exceptions.SimplerReaderException;
 import at.fundev.simpler.reader.worker.model.FeedItem;
 
@@ -46,7 +47,9 @@ public class FileExtractionProcessor implements ExtractionProcessor {
 			writer.print(content);
 			writer.close();
 			
-			return handler.handle(htmlFile);
+			String url = handler.handle(htmlFile);
+			
+			return url;
 		} catch (IOException e) {
 			throw new SimplerReaderException(e);
 		}
